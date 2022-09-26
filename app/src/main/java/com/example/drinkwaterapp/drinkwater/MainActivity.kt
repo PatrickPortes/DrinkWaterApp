@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import com.example.drinkwaterapp.R
-import com.example.drinkwaterapp.sync.DrinkWaterReminderIntentService
-import com.example.drinkwaterapp.sync.DrinkWaterReminderTask
+import com.example.drinkwaterapp.sync.IncrementReminderIntentService
+import com.example.drinkwaterapp.sync.IncrementReminderTask
+import com.example.drinkwaterapp.sync.DecrementReminderTask
+import com.example.drinkwaterapp.sync.DecrementReminderIntentService
 import com.example.drinkwaterapp.utils.PreferencesUtils
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -20,13 +22,26 @@ class MainActivity : AppCompatActivity(),
 
         updateWaterCount()
 
-        imageViewCopo.setOnClickListener(){
-            incrementWaterHandler()
-        }
+        buttonsListeners()
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(this)
         prefs.registerOnSharedPreferenceChangeListener(this)
 
+    }
+
+    fun buttonsListeners(){
+        imageViewCopo.setOnClickListener(){
+            incrementWaterHandler()
+        }
+        imageViewAumentar.setOnClickListener(){
+            incrementWaterHandler()
+        }
+        imageViewDiminuir.setOnClickListener(){
+            decrementWaterHandler()
+        }
+        imageViewReset.setOnClickListener(){
+            resetWaterCount()
+        }
     }
 
     fun updateWaterCount(){
@@ -35,9 +50,19 @@ class MainActivity : AppCompatActivity(),
     }
 
     fun incrementWaterHandler(){
-        val intent = Intent(this, DrinkWaterReminderIntentService::class.java)
-        intent.action = DrinkWaterReminderTask.ACTION_INCREMENT_WATER_COUNT
+        val intent = Intent(this, IncrementReminderIntentService::class.java)
+        intent.action = IncrementReminderTask.ACTION_INCREMENT_WATER_COUNT
         startService(intent)
+    }
+
+    fun decrementWaterHandler(){
+        val intent = Intent(this, DecrementReminderIntentService::class.java)
+        intent.action = DecrementReminderTask.ACTION_DECREMENT_WATER_COUNT
+        startService(intent)
+    }
+
+    fun resetWaterCount(){
+        PreferencesUtils.resetWaterCount(this)
     }
 
     override fun onDestroy() {

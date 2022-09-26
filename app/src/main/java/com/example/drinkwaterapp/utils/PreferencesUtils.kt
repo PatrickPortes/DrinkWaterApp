@@ -29,5 +29,19 @@ class PreferencesUtils {
             setWaterCount(context, ++waterCount)
         }
 
+        @Synchronized
+        fun decrementWaterCount(context: Context){
+            var waterCount: Int = getWaterCount(context)
+            setWaterCount(context, --waterCount)
+            if ( waterCount < 0){
+                setWaterCount(context, 0)
+            }
+        }
+
+        @Synchronized
+        fun resetWaterCount(context: Context){
+            setWaterCount(context, glassesOfWater = 0)
+        }
+
     }
 }
